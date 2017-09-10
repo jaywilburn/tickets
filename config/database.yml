@@ -1,0 +1,13 @@
+defaults: &defaults
+  host: localhost
+  pool: 25
+  adapter: mysql2
+  username: root
+
+development:
+  <<: *defaults
+  database: development_tickets
+
+test:
+  <<: *defaults
+  database: test_tickets
