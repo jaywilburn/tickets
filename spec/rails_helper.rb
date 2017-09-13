@@ -7,7 +7,8 @@ abort("The Rails environment is running in production mode!") if Rails.env.produ
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'capybara/rspec'
-require 'simplecov'
+require 'pry'
+require 'support/authentication_helper'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -30,13 +31,12 @@ ActiveRecord::Migration.maintain_test_schema!
 
 Capybara.javascript_driver = :webkit
 Capybara.default_driver    = :webkit
-Capybara.default_max_wait_time = 10
-
-SimpleCov.start
-
-SimpleCov.minimum_coverage 30
+# Capybara.default_max_wait_time = 10
 
 RSpec.configure do |config|
+
+  config.include AuthenticationHelper, type: :feature
+
 
   config.include FactoryGirl::Syntax::Methods
 

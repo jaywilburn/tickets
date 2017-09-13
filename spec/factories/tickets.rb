@@ -1,10 +1,9 @@
 FactoryGirl.define do
   factory :ticket do
-    subject ""
-    description ""
-    category ""
-    priority ""
-    status ""
-    external_identifier ""
+    subject Faker::Lorem.sentence
+    description Faker::Lorem.paragraph
+    category Ticket::CATEGORY.sample
+    priority Ticket::PRIORITY.sample
+    status Ticket::STATUS.sample
   end
 end

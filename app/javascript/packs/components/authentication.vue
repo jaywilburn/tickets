@@ -11,7 +11,7 @@
         <label for="user-password">Password</label>
         <input type="password" class="form-control" name="user-password" id="user-password" placeholder="Password" v-model="user.password">
       </div>
-      <button type="submit" class="btn btn-default">Submit</button>
+      <button type="submit" class="btn btn-default">Login</button>
     </form>
   </div>
 </template>

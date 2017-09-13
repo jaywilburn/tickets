@@ -29,7 +29,7 @@
 
 * How to run the test suite
 
-  rspec
+  bundle exec rspec
 
 * Requirements that I have not covered in my submission
 

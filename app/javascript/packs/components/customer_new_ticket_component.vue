@@ -43,6 +43,7 @@ export default {
     createTicket: function() {
       this.$http.post('/api/requested_tickets.json', {ticket: this.ticket}).then(response => {
         bus.$emit('ticket', response.body);
+        bus.$emit('successAlertMessage', 'Ticket has been created');
         this.ticket = {subject: '', description: '', priority: '', category: ''};
       }, response => {
         alert(response.body.errors);

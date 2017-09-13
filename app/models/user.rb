@@ -6,7 +6,8 @@ class User < ApplicationRecord
 
   scope :by_lower_email, -> (email) { where("lower(email) = lower(:value)", { value: email }) }
 
-  validates :type, presence: true
+  validates :email, presence: true, format: {with: /@/}
+  validates :type, inclusion: { in: TYPE }, presence: true
 
   def type_enum
     TYPE
