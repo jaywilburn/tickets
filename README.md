@@ -1,24 +1,41 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
-
-Things you may want to cover:
-
 * Ruby version
+
+  2.3.1
 
 * System dependencies
 
-* Configuration
+  - MySQL 5.7.17
+  - Yarn 1.0.1
+  - NodeJS 8.1.4
 
 * Database creation
 
+  rails db:create
+
 * Database initialization
+
+  rails db:migrate
+  rails db:seed
+
+* Install
+
+  bundle
+
+* Running
+
+  foreman start
 
 * How to run the test suite
 
-* Services (job queues, cache servers, search engines, etc.)
+  rspec
 
-* Deployment instructions
+* Requirements that I have not covered in my submission
 
-* ...
+  Functional automatic unit / integration tests.
+
+* Constructive feedback for improving the assignment
+
+  There should be a requirement that the status must be updated in an specific order using the state pattern, like AASM. e.g: You can change the status from 'open' to 'closed', but can't change from 'closed' to 'open'.
+

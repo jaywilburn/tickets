@@ -5,7 +5,7 @@ class Ability
     user ||= User.new # guest user (not logged in)
     case user.type
     when "SupportAgent"
-      can [:assignee], Ticket
+      can [:update], Ticket
     when "Customer"
       can [:request], Ticket
     end

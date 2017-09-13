@@ -3,7 +3,6 @@ RailsAdmin.config do |config|
   config.authenticate_with do
     authenticate_or_request_with_http_basic('Login required') do |username, password|
       user = Admin.by_lower_email(username).first
-      return unless user
       user if user.try(:authenticate, password)
     end
   end
@@ -36,7 +35,7 @@ RailsAdmin.config do |config|
     field :email
     field :password
     field :password_confirmation
-    field :assignated_tickets
+    field :assigned_tickets
     exclude_fields :password_digest
   end
 

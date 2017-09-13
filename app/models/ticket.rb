@@ -4,49 +4,24 @@ class Ticket < ApplicationRecord
   PRIORITY = %w(urgent high normal low)
   STATUS = %w(pending hold solved closed)
 
-  # AASM - State machines for Ruby classes (plain Ruby, ActiveRecord, Mongoid)
-  # https://github.com/aasm/aasm
-  include AASM
   include RandomGenerator
-
-  attr_accessor :new_status
-
-  # AASM setup:
-  # - Default status is open
-  # - Can transition to pending if status is: open, solved or hold
-  # - Can transition to hold if status is: open, pending or solved
-  # - Can transition to solved if status is: open, pending or hold
-  # - Can transition to closed if status is: solved
-  aasm column: :status do
-    state :open, initial: true
-    state :pending, :hold, :solved, :closed
-
-    event :mark_as_pending do
-      transitions from: [:open, :solved, :hold], to: :pending
-    end
-
-    event :mark_as_hold do
-      transitions from: [:open, :pending, :solved], to: :hold
-    end
-
-    event :mark_as_solved do
-      transitions from: [:open, :pending, :hold], to: :solved
-    end
-
-    event :mark_as_closed do
-      transitions from: [:solved], to: :closed
-    end
-  end
+  include Concerns::Ticket::Search
 
   # -- ASSOCIATIONS --
 
   belongs_to :requester, class_name: "Customer", foreign_key: "requester_id", optional: true
 
-  belongs_to :assignee, class_name: "SupportAgent", foreign_key: "assignee_id", optional: true
+  belongs_to :assigned, class_name: "SupportAgent", foreign_key: "assigned_id", optional: true
+
+  # -- DELEGATIONS --
+
+  delegate :name, to: :requester, prefix: true, allow_nil: true
+
+  delegate :name, to: :assigned, prefix: true, allow_nil: true
 
   # -- SCOPES --
 
-  scope :subject_or_description_like, -> (value) { where("subject ILIKE :value OR description ILIKE :value", value: "%#{value}%") }
+  scope :by_subject_or_description_like, -> (value) { where("subject LIKE :value OR description LIKE :value", value: "%#{value}%") }
 
   scope :by_category, -> (value) { where(category: value)}
 
@@ -58,7 +33,9 @@ class Ticket < ApplicationRecord
 
   scope :by_requester_id, -> (value) { where(requester_id: value)}
 
-  scope :by_assignee_id, -> (value) { where(assignee_id: value)}
+  scope :by_assigned_id, -> (value) { where(assigned_id: value)}
+
+  scope :last_month, -> { where(created_at: DateTime.current.beginning_of_month..DateTime.current.end_of_month)  }
 
   # -- VALIDATIONS --
 
@@ -69,12 +46,9 @@ class Ticket < ApplicationRecord
   validates :priority, inclusion: { in: PRIORITY }, allow_blank: true
 
   # New status inclusion validation, allows blank and executes on update
-  validates :new_status, inclusion: { in: STATUS }, allow_blank: true, on: :update
+  validates :status, inclusion: { in: STATUS }, allow_blank: true, on: :update
 
   # -- CALLBACKS --
-
-  # Before update save new status if there is new status
-  before_update :save_new_status, if: :new_status
 
   # Before create save external id
   before_create :save_external_identifier
@@ -91,21 +65,19 @@ class Ticket < ApplicationRecord
     STATUS
   end
 
-  private
-
-  # save_new_status
-  # Description:
-  # - Fires AASM state
-  # - Captures exception if can't transition
-  #   from one state to a new one and halt callbacks
-  def save_new_status
-    begin
-      send("mark_as_#{new_status}".to_sym)
-    rescue => e
-      self.errors.add(:new_status, "can't transition from #{status}")
-      throw(:abort)
+  class << self
+    def export_as_pdf
+      TicketsPdfExport.new(
+        tickets: all,
+        font: {
+          bold: Rails.root.join('app/assets/fonts/roboto/Roboto-Bold.ttf'),
+          normal: Rails.root.join('app/assets/fonts/roboto/Roboto-Regular.ttf')
+        }
+      )
     end
   end
+
+  private
 
   # save_external_identifier
   # Description:

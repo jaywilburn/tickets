@@ -2,7 +2,7 @@ class Api::V1::Customers::RequestedTicketsController < Api::V1::BaseController
 
   def create
     authorize! :request, Ticket
-    requested_tickets = current_user.requested_tickets.build(requested_ticket_params)
+    requested_ticket = current_user.requested_tickets.build(ticket_params)
     if requested_ticket.save
       render json: requested_ticket, status: :created
     else
@@ -10,8 +10,8 @@ class Api::V1::Customers::RequestedTicketsController < Api::V1::BaseController
     end
   end
 
-  def requested_ticket_params
-    params.require(:requested_ticket_params).permit(:subject, :description, :category, :priority)
+  def ticket_params
+    params.require(:ticket).permit(:subject, :description, :category, :priority)
   end
 
 end

@@ -5,7 +5,7 @@ class Api::V1::AuthenticationsController < Api::V1::BaseController
   def create
     user = User.by_lower_email(user_params[:email]).first
     if user.try(:authenticate, user_params[:password])
-      render json: { token: JsonWebToken.encode({ user_id: user.id, exp: 1.week.from_now.to_i }), user_id: user.id }, status: :ok
+      render json: { token: JsonWebToken.encode({ user_id: user.id, exp: 1.week.from_now.to_i }), user: ActiveModelSerializers::SerializableResource.new(user, {serializer: Api::V1::UserSerializer}).as_json }, status: :ok
     else
       render json: { errors: "Invalid email/password combination" }, status: :bad_request
     end

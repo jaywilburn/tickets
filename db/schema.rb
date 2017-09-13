@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170910060353) do
+ActiveRecord::Schema.define(version: 20170910060817) do
+
+  create_table "tickets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "subject"
+    t.text "description"
+    t.string "category"
+    t.string "priority"
+    t.string "status", default: "open"
+    t.string "external_identifier"
+    t.integer "requester_id"
+    t.integer "assigned_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["assigned_id"], name: "index_tickets_on_assigned_id"
+    t.index ["external_identifier"], name: "index_tickets_on_external_identifier", unique: true
+    t.index ["requester_id"], name: "index_tickets_on_requester_id"
+    t.index ["subject"], name: "index_tickets_on_subject"
+  end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -19,6 +36,7 @@ ActiveRecord::Schema.define(version: 20170910060353) do
     t.string "type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["email"], name: "index_users_on_email", unique: true
   end
 
 end

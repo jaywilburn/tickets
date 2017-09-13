@@ -43,6 +43,7 @@ group :development, :test do
   gem 'capybara-webkit', '1.1.0'
   gem 'rspec-rails', '~> 3.6'
   gem 'factory_girl_rails', '4.8.0'
+  gem 'timecop'
 end
 
 group :development do
@@ -53,6 +54,7 @@ group :development do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'pry'
+  gem 'foreman'
 end
 
 group :test do
@@ -65,8 +67,12 @@ gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 gem 'aasm', '4.12.2'
 gem 'active_model_serializers', '~> 0.10.6'
-gem 'cancancan', '~> 2.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', require: false
+gem 'cancancan', '~> 2.0'
+gem 'faker', '1.8.4'
 gem 'jwt', '2.0.0'
+gem 'kaminari', '1.0.1'
 gem 'rails_admin', '~> 1.2'
+gem 'prawn', '2.2.2'
+gem 'prawn-table', '0.2.2'
