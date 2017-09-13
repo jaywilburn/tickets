@@ -10,6 +10,12 @@
   - Yarn 1.0.1
   - NodeJS 8.1.4
 
+* Install
+
+  bundle
+
+  yarn install
+
 * Database creation
 
   rails db:create
@@ -18,10 +24,6 @@
 
   rails db:migrate
   rails db:seed
-
-* Install
-
-  bundle
 
 * Running
 
